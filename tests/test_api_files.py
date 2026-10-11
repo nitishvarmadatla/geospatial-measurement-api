@@ -69,10 +69,13 @@ def test_kml_upload_metadata_and_measurements_flow(client, sample_kml_bytes):
     # Verify Features
     features = meas_data["features"]
     assert len(features) == 3
+    for f in features:
+        assert f["crs"] == "EPSG:4326"
 
     # Feature 0: Polygon with hole
     f0 = features[0]
     assert f0["feature_index"] == 0
+    assert f0["crs"] == "EPSG:4326"
     assert f0["geometry_type"] == "Polygon"
     assert f0["measurement_unit"] == "sq_m"
     assert f0["measurement_status"] == "success"
@@ -87,6 +90,7 @@ def test_kml_upload_metadata_and_measurements_flow(client, sample_kml_bytes):
     # Feature 1: LineString
     f1 = features[1]
     assert f1["feature_index"] == 1
+    assert f1["crs"] == "EPSG:4326"
     assert f1["geometry_type"] == "LineString"
     assert f1["measurement_unit"] == "m"
     assert f1["measurement_status"] == "success"
@@ -100,6 +104,7 @@ def test_kml_upload_metadata_and_measurements_flow(client, sample_kml_bytes):
     # Feature 2: Point
     f2 = features[2]
     assert f2["feature_index"] == 2
+    assert f2["crs"] == "EPSG:4326"
     assert f2["geometry_type"] == "Point"
     assert f2["area_sq_m"] is None
     assert f2["length_m"] is None
@@ -127,6 +132,7 @@ def test_shapefile_zip_upload_and_measurements(client, sample_shapefile_zip_byte
     meas = res_meas.json()
     assert len(meas["features"]) == 1
     f0 = meas["features"][0]
+    assert "WGS_1984" in f0["crs"] or "4326" in f0["crs"]
     assert f0["geometry_type"] in ("Polygon", "MultiPolygon")
     assert f0["measurement_status"] == "success"
     assert f0["area_sq_m"] is not None
@@ -155,6 +161,7 @@ def test_shapefile_missing_prj_uncertainty_handling(client, shapefile_missing_pr
     assert len(meas["features"]) == 1
 
     f0 = meas["features"][0]
+    assert f0["crs"] == "UNKNOWN"
     assert f0["measurement_status"] == "skipped_missing_crs"
     assert f0["area_sq_m"] is None
     assert f0["length_m"] is None

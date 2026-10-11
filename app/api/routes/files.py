@@ -160,6 +160,7 @@ def get_file_measurements(id: str, db: Session = Depends(get_db)) -> FileMeasure
                 feature_index=f.feature_index,
                 feature_id=f.feature_id,
                 geometry_type=f.geometry_type,
+                crs=db_file.crs,
                 area_sq_m=f.area_sq_m,
                 length_m=f.length_m,
                 measurement_unit=f.measurement_unit,

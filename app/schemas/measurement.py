@@ -9,6 +9,7 @@ class FeatureMeasurementResponse(BaseModel):
     feature_index: int = Field(..., description="0-based sequential index from source dataset")
     feature_id: Optional[str] = Field(default=None, description="Feature ID or Placemark identifier")
     geometry_type: str = Field(..., description="Geometry type: Polygon, LineString, Point, etc.")
+    crs: str = Field(..., description="Source Coordinate Reference System of the feature (e.g., 'EPSG:4326', 'UNKNOWN')")
     area_sq_m: Optional[float] = Field(default=None, description="Polygon/MultiPolygon planar area in square metres (sq_m)")
     length_m: Optional[float] = Field(default=None, description="LineString/MultiLineString length in metres (m)")
     measurement_unit: Optional[str] = Field(default=None, description="Measurement unit ('sq_m', 'm', or null for Points/unsupported)")
